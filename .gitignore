@@ -74,3 +74,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+!/libs/
+!/libs/mysql-connector-java-5.1.40-bin.jar
+!/libs/fxiconics-0.0.5-jfx.jar
+!/libs/jbasx-0.1.9.jar
+!/libs/fontawesomefx-8.9.jar

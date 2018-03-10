@@ -119,7 +119,7 @@ def formatVersionCode(int versionCode) {
 }
 
 def props = new Properties()
-file("/Users/martin/IdeaProjects/huej/src/main/java/io/celox/app.properties").withInputStream {
+file("/Users/martin/IdeaProjects/jhue/src/main/java/io/celox/app.properties").withInputStream {
     props.load(it)
 }
 
