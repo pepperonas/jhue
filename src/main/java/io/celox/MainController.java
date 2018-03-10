@@ -16,11 +16,22 @@
 
 package io.celox;
 
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import com.pepperonas.jbasx.log.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.sql.Connection;
 
 import io.celox.dialog.DialogAbout;
+import io.celox.dialog.DialogInfo;
+import io.celox.utils.HttpUtils;
+import io.celox.utils.Setup;
+import io.celox.utils.Utils;
+import io.celox.utils.UtilsGui;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -46,6 +57,10 @@ public class MainController {
     public Label label_info_result_count, label_info_1, label_info_2;
     @FXML
     public GridPane grid_actions_higher, grid_actions_lower;
+    @FXML
+    public JFXToggleButton tgl_btn_on_off;
+    @FXML
+    public JFXTextField tf_lamp;
 
     private Connection mConnection;
 
@@ -53,8 +68,19 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        Utils.initLogger("huej");
+
         vbox_root.getStylesheets().add("/styles/styles.css");
         initGui();
+
+        //        HttpUtils.executePost("http://192.168.178.134/api/newdeveloper", "");
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                UtilsGui.closeOnEsc(vbox_root);
+            }
+        });
     }
 
     private void initGui() {
@@ -94,4 +120,58 @@ public class MainController {
         this.mApp = app;
     }
 
+    public void onBtnRegister(@SuppressWarnings("unused") ActionEvent actionEvent) {
+        Log.i(TAG, "onBtnRegister: ");
+
+        String result = HttpUtils.executePost("http://192.168.178.134/api", "{\"devicetype\":\"my_hue_app#huej martin\"}");
+        if (result != null) {
+            try {
+                JSONArray jsonArray = new JSONArray(result);
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                if (jsonObject.has("error")) {
+                    String response = jsonObject.getString("error");
+                    Log.w(TAG, "onBtnRegister: FAILED! response=" + response);
+                } else {
+                    String response = jsonObject.getString("success");
+                    Log.i(TAG, "onBtnRegister: SUCCESS! response=" + response);
+                    JSONObject successObject = jsonObject.getJSONObject("success");
+                    String username = successObject.getString("username");
+                    Log.i(TAG, "onBtnRegister: " + username);
+                    Setup.setUsername(username);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void onBtnReset(@SuppressWarnings("unused") ActionEvent actionEvent) {
+        Log.i(TAG, "onBtnReset: will reset username...");
+        Setup.setUsername("");
+    }
+
+    public void onBtnPut(@SuppressWarnings("unused") ActionEvent actionEvent) {
+        Log.i(TAG, "onBtnPut: ");
+        if (tf_lamp.getText().isEmpty()) {
+            tf_lamp.setText("1");
+        }
+        String lamp = tf_lamp.getText();
+        String state = tgl_btn_on_off.isSelected() ? "true" : "false";
+        Log.i(TAG, "onBtnPut: " + state);
+        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp + "/state", "{\"on\":" + state + "}");
+        Log.i(TAG, "onBtnPut: " + result);
+    }
+
+    public void onBtnInfo(@SuppressWarnings("unused") ActionEvent actionEvent) {
+        Log.i(TAG, "onBtnInfo: ");
+        String result = HttpUtils.executeGet("http://192.168.178.134/api/" + Setup.getUsername() + "/lights");
+        if (!result.isEmpty()) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                new DialogInfo("Info", jsonObject.toString(2));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

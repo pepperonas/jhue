@@ -47,7 +47,7 @@ public class Utils {
         String logFilePath = home + File.separator + "jlog" + File.separator;
         String logFileName = appName + "-" + sdf.format(logDate) + ".log";
         Jbasx.setLogWriter(logFilePath, logFileName, true);
-        //        Setup.setLogFile(logFilePath + logFileName);
+        Setup.setLogFile(logFilePath + logFileName);
 
         Thread.setDefaultUncaughtExceptionHandler(Utils::logError);
     }
