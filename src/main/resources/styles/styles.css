@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2018 Martin Pfeffer
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*.label {*/
+/*-fx-font-size: 12px;*/
+/*-fx-font-weight: bold;*/
+/*-fx-text-fill: #333333;*/
+/*-fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.5), 0, 0, 0, 1);*/
+/*}*/
+
+/*.button:hover {*/
+/*-fx-background-color: #B2DFDB;*/
+/*}*/
+
+/*.split-pane > .split-pane-divider {*/
+/*-fx-padding: 0 0.15em 0 0.15em;*/
+/*}*/
+
+.button {
+    -fx-text-fill: WHITE;
+    -fx-background-color: #AD1457;
+    -fx-font-size: 14px;
+}
+
+#btn_show_dialog_rev_mapper {
+    -fx-text-fill: #212121;
+    -fx-background-color: #FFFF00;
+    -fx-font-size: 14px;
+}
+
+#btn_style_01 {
+    -fx-text-fill: #EFEFEF;
+    -fx-background-color: #009688;
+    -fx-font-size: 14px;
+}
+
+#btn_style_02 {
+    -fx-text-fill: #EFEFEF;
+    -fx-background-color: #212121;
+    -fx-font-size: 14px;
+}
+
+#btn_style_ok {
+    -fx-text-fill: #EFEFEF;
+    -fx-background-color: #388E3C;
+    -fx-font-size: 14px;
+}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?><?import com.jfoenix.controls.JFXTextField?><?import javafx.scene.control.Label?><?import javafx.scene.control.Menu?><?import javafx.scene.control.MenuBar?><?import javafx.scene.control.MenuItem?><?import javafx.scene.control.SeparatorMenuItem?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.Pane?><?import javafx.scene.layout.VBox?>
+<!--
+  ~ Copyright (c) 2018 Martin Pfeffer
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<VBox fx:id="vbox_root" spacing="15" xmlns="http://javafx.com/javafx/8.0.112"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.celox.MainController">
+    <MenuBar>
+        <menus>
+            <Menu text="File">
+                <items>
+                    <MenuItem text="Info" onAction="#onMenuInfo" />
+                    <MenuItem text="Preferences" onAction="#onMenuPreferences" />
+                    <MenuItem text="Show Log" onAction="#onMenuShowLog" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Exit" onAction="#onMenuExit" />
+                </items>
+            </Menu>
+            <Menu text="Help">
+                <items>
+                    <MenuItem text="Instructions" onAction="#onMenuInstructions" />
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar>
+    <Label fx:id="label_info_1" />
+    <Label fx:id="label_info_2" />
+    <VBox alignment="CENTER" spacing="25">
+        <HBox spacing="10" alignment="CENTER"></HBox>
+        <Label fx:id="label_info_result_count"
+            style="-fx-font-size: 16px; -fx-font-family: monospace;" />
+        <GridPane fx:id="grid_actions_higher" alignment="CENTER"></GridPane>
+
+        <Pane prefWidth="Infinity" minHeight="20" style="-fx-background-color: lightblue;" />
+        <GridPane fx:id="grid_actions_lower" alignment="CENTER" gridLinesVisible="true" hgap="20"
+            vgap="20">
+            <JFXButton fx:id="btn_register" text="REGISTER" GridPane.columnIndex="0"
+                GridPane.rowIndex="0" />
+            <JFXButton fx:id="btn_show_info" text="SHOW INFO" GridPane.columnIndex="1"
+                GridPane.rowIndex="0" />
+            <JFXTextField fx:id="tf_x" labelFloat="true" promptText="X" GridPane.columnIndex="0"
+                GridPane.rowIndex="1" />
+        </GridPane>
+    </VBox>
+</VBox>
