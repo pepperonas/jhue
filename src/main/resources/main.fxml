@@ -23,7 +23,6 @@
         <menus>
             <Menu text="File">
                 <items>
-                    <MenuItem text="Info" onAction="#onMenuInfo" />
                     <MenuItem text="Preferences" onAction="#onMenuPreferences" />
                     <MenuItem text="Show Log" onAction="#onMenuShowLog" />
                     <SeparatorMenuItem />
@@ -32,6 +31,7 @@
             </Menu>
             <Menu text="Help">
                 <items>
+                    <MenuItem text="About" onAction="#onMenuAbout" />
                     <MenuItem text="Instructions" onAction="#onMenuInstructions" />
                 </items>
             </Menu>
@@ -45,21 +45,27 @@
             style="-fx-font-size: 16px; -fx-font-family: monospace;" />
         <GridPane fx:id="grid_actions_higher" alignment="CENTER"></GridPane>
 
-        <Pane prefWidth="Infinity" minHeight="20" style="-fx-background-color: lightblue;" />
-        <GridPane fx:id="grid_actions_lower" alignment="CENTER" gridLinesVisible="true" hgap="20"
+        <Pane prefWidth="Infinity" minHeight="5" style="-fx-background-color: lightblue;" />
+        <GridPane fx:id="grid_actions_lower" alignment="CENTER" gridLinesVisible="false" hgap="20"
             vgap="20">
             <JFXButton fx:id="btn_register" onAction="#onBtnRegister" text="REGISTER"
                 GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <JFXTextField fx:id="tf_lamp" labelFloat="true" promptText="Lamp" GridPane.columnIndex="0"
-                GridPane.rowIndex="1" />
-            <JFXToggleButton fx:id="tgl_btn_on_off" text="ON/OFF" GridPane.columnIndex="1"
-                GridPane.rowIndex="1" />
-            <JFXButton fx:id="btn_put" onAction="#onBtnPut" text="SEND" GridPane.columnIndex="3"
-                GridPane.rowIndex="1" />
-            <JFXButton fx:id="btn_info" onAction="#onBtnInfo" text="INFO" GridPane.columnIndex="0"
+            <JFXTextField fx:id="tf_lamp" labelFloat="true" promptText="Lamp"
+                GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <JFXToggleButton fx:id="tgl_btn_on_off" onAction="#onTglBtnOnOff" text="ON/OFF"
+                GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <JFXTextField fx:id="tf_hue" labelFloat="true" promptText="Hue" GridPane.columnIndex="0"
                 GridPane.rowIndex="2" />
-            <JFXButton fx:id="btn_reset" onAction="#onBtnReset" text="RESET"
+            <JFXTextField fx:id="tf_saturation" labelFloat="true" promptText="Saturation"
                 GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <JFXTextField fx:id="tf_brightness" labelFloat="true" promptText="Brightness"
+                GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <JFXButton fx:id="btn_put_color" onAction="#onBtnPutColor" text="SEND COLOR"
+                GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <JFXButton fx:id="btn_info" onAction="#onBtnInfo" text="INFO" GridPane.columnIndex="0"
+                GridPane.rowIndex="3" />
+            <JFXButton fx:id="btn_reset" onAction="#onBtnReset" text="RESET"
+                GridPane.columnIndex="1" GridPane.rowIndex="3" />
         </GridPane>
     </VBox>
 </VBox>

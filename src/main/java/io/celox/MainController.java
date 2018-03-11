@@ -61,6 +61,8 @@ public class MainController {
     public JFXToggleButton tgl_btn_on_off;
     @FXML
     public JFXTextField tf_lamp;
+    @FXML
+    public JFXTextField tf_hue, tf_saturation, tf_brightness;
 
     private Connection mConnection;
 
@@ -111,8 +113,8 @@ public class MainController {
         mApp.getHostServices().showDocument("manual.html");
     }
 
-    public void onMenuInfo(@SuppressWarnings("unused") ActionEvent actionEvent) {
-        Log.i(TAG, "onMenuInfo: ");
+    public void onMenuAbout(@SuppressWarnings("unused") ActionEvent actionEvent) {
+        Log.i(TAG, "onMenuAbout: ");
         new DialogAbout(mApp);
     }
 
@@ -150,15 +152,31 @@ public class MainController {
         Setup.setUsername("");
     }
 
-    public void onBtnPut(@SuppressWarnings("unused") ActionEvent actionEvent) {
+    public void onBtnPutColor(@SuppressWarnings("unused") ActionEvent actionEvent) {
         Log.i(TAG, "onBtnPut: ");
         if (tf_lamp.getText().isEmpty()) {
             tf_lamp.setText("1");
         }
         String lamp = tf_lamp.getText();
-        String state = tgl_btn_on_off.isSelected() ? "true" : "false";
-        Log.i(TAG, "onBtnPut: " + state);
-        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp + "/state", "{\"on\":" + state + "}");
+        if (tf_hue.getText().isEmpty()) {
+            tf_hue.setText("10000");
+        }
+        String color = tf_hue.getText();
+
+        if (tf_brightness.getText().isEmpty()) {
+            tf_brightness.setText("254");
+        }
+        String brightness = tf_brightness.getText();
+
+        if (tf_saturation.getText().isEmpty()) {
+            tf_saturation.setText("254");
+        }
+        String saturation = tf_saturation.getText();
+
+        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp + "/state", "{\"on\":true, " +
+                "\"sat\":" + saturation + ", " +
+                "\"bri\":" + brightness + ", " +
+                "\"hue\":" + color + "}");
         Log.i(TAG, "onBtnPut: " + result);
     }
 
@@ -173,5 +191,16 @@ public class MainController {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void onTglBtnOnOff(@SuppressWarnings("unused") ActionEvent actionEvent) {
+        String state = tgl_btn_on_off.isSelected() ? "true" : "false";
+        if (tf_lamp.getText().isEmpty()) {
+            tf_lamp.setText("1");
+        }
+        String lamp = tf_lamp.getText();
+        Log.i(TAG, "onBtnPut: " + state);
+        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp + "/state", "{\"on\":" + state + "}");
+        Log.i(TAG, "onBtnPut: " + result);
     }
 }
