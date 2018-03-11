@@ -49,7 +49,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main.fxml"));
         Parent root = fxmlLoader.load();
         MainController controller = fxmlLoader.getController();
-        controller.setApp(this);
+        controller.setApp(Main.this);
 
         initScene(primaryStage, root);
 

@@ -150,7 +150,7 @@ jfxJar.finalizedBy(archive)
 
 jfx {
     verbose = true
-    mainClass = "com.kjtech.MainDbExec"
+    mainClass = "io.celox.Main"
     jfxAppOutputDir = "build/jfx/app"
     jfxMainAppJarName = app_name + "-" + formatVersionCode(version) + ".jar"
     deployDir = "src/main/deploy"

@@ -26,11 +26,19 @@ import java.util.prefs.Preferences;
 public class Setup {
 
     public static void setLogFile(String logFile) {
-        Preferences.userNodeForPackage(Setup.class).put("log_file", logFile);
+        Preferences.userNodeForPackage(Setup.class).put("logfile", logFile);
     }
 
     public static String getLogFile() {
-        return Preferences.userNodeForPackage(Setup.class).get("log_file", "");
+        return Preferences.userNodeForPackage(Setup.class).get("logfile", "");
+    }
+
+    public static void setDeviceIp(String deviceIp) {
+        Preferences.userNodeForPackage(Setup.class).put("device_ip", deviceIp);
+    }
+
+    public static String getDeviceIp() {
+        return Preferences.userNodeForPackage(Setup.class).get("device_ip", "");
     }
 
     public static void setUsername(String username) {
@@ -39,5 +47,9 @@ public class Setup {
 
     public static String getUsername() {
         return Preferences.userNodeForPackage(Setup.class).get("username", "");
+    }
+
+    public static boolean hasValidUsername() {
+        return !Preferences.userNodeForPackage(Setup.class).get("username", "").isEmpty();
     }
 }

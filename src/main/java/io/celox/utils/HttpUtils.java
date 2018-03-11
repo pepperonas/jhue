@@ -24,12 +24,10 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.pepperonas.jbasx.Jbasx.TAG;
@@ -50,10 +48,8 @@ public class HttpUtils {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
             connection.setRequestProperty("Content-Length", Integer.toString(urlParameters.getBytes().length));
             connection.setRequestProperty("Content-Language", "en-US");
-
             connection.setUseCaches(false);
             connection.setDoOutput(true);
 
@@ -62,16 +58,16 @@ public class HttpUtils {
             wr.writeBytes(urlParameters);
             wr.close();
 
-            // get Response
+            // get response
             InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             StringBuilder response = new StringBuilder();
             String line;
-            while ((line = rd.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 response.append(line);
                 response.append('\r');
             }
-            rd.close();
+            reader.close();
 
             if (Const.LOG_HTTP_REQUESTS) {
                 try {
@@ -96,75 +92,84 @@ public class HttpUtils {
     }
 
     public static String executeGet(String targetURL) {
-        StringBuilder response = new StringBuilder();
-        URL url = null;
-        try {
-            url = new URL(targetURL);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (url != null) {
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-                while ((line = rd.readLine()) != null) {
-                    response.append(line);
-                }
-                rd.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HttpURLConnection connection = null;
 
-        if (Const.LOG_HTTP_REQUESTS) {
-            try {
-                if (!response.toString().isEmpty()) {
-                    JSONObject jsonObject = new JSONObject(response.toString());
-                    Log.w(TAG, "executeGet: " + targetURL + "\n" + jsonObject.toString(2));
+        try {
+            // create connection
+            URL url = new URL(targetURL);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            if (Const.LOG_HTTP_REQUESTS) {
+                try {
+                    if (!response.toString().isEmpty()) {
+                        JSONObject jsonObject = new JSONObject(response.toString());
+                        Log.w(TAG, "executeGet: " + targetURL + "\n" + jsonObject.toString(2));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            }
+
+            return response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
             }
         }
-
-        return response.toString();
     }
 
     public static String executePut(String targetURL, String urlParameters) {
-        String response = null;
+        HttpURLConnection connection = null;
+
         try {
+            // create connection
             URL url = new URL(targetURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod("PUT");
+
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
             out.write(urlParameters);
             out.close();
             connection.getInputStream();
-
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String s;
-            StringBuilder sb = new StringBuilder();
-            while ((s = in.readLine()) != null) {
-                sb.append(s).append(" ");
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                response.append(line).append(" ");
             }
-            response = sb.toString();
+
             if (Const.LOG_HTTP_REQUESTS) {
                 try {
-                    if (!response.isEmpty()) {
-                        JSONArray jsonArray = new JSONArray(response);
+                    if (!response.toString().isEmpty()) {
+                        JSONObject jsonArray = new JSONObject(response);
                         Log.w(TAG, "executePut: " + targetURL + "\n" + jsonArray.toString(2));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
+
+            return response.toString();
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
-        return response;
     }
 
 }

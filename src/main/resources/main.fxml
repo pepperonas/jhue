@@ -16,63 +16,56 @@
   ~ limitations under the License.
   -->
 
-<?import com.jfoenix.controls.JFXButton?><?import com.jfoenix.controls.JFXColorPicker?><?import com.jfoenix.controls.JFXSlider?><?import com.jfoenix.controls.JFXTextField?><?import com.jfoenix.controls.JFXToggleButton?><?import javafx.scene.control.Label?><?import javafx.scene.control.Menu?><?import javafx.scene.control.MenuBar?><?import javafx.scene.control.MenuItem?><?import javafx.scene.control.SeparatorMenuItem?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.Pane?><?import javafx.scene.layout.VBox?>
+<?import com.jfoenix.controls.JFXButton?><?import com.jfoenix.controls.JFXColorPicker?><?import com.jfoenix.controls.JFXComboBox?><?import com.jfoenix.controls.JFXSlider?><?import com.jfoenix.controls.JFXToggleButton?><?import javafx.scene.control.Label?><?import javafx.scene.control.Menu?><?import javafx.scene.control.MenuBar?><?import javafx.scene.control.MenuItem?><?import javafx.scene.control.SeparatorMenuItem?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.Pane?><?import javafx.scene.layout.VBox?>
 <VBox fx:id="vbox_root" spacing="15" xmlns="http://javafx.com/javafx/8.0.112"
     xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.celox.MainController">
     <MenuBar>
-        <menus>
-            <Menu text="File">
-                <items>
-                    <MenuItem text="Preferences" onAction="#onMenuPreferences" />
-                    <MenuItem text="Show Log" onAction="#onMenuShowLog" />
-                    <SeparatorMenuItem />
-                    <MenuItem text="Exit" onAction="#onMenuExit" />
-                </items>
-            </Menu>
-            <Menu text="Help">
-                <items>
-                    <MenuItem text="About" onAction="#onMenuAbout" />
-                    <MenuItem text="Instructions" onAction="#onMenuInstructions" />
-                </items>
-            </Menu>
-        </menus>
+        <Menu text="File">
+            <MenuItem text="Preferences" onAction="#onMenuPreferences" />
+            <MenuItem text="Show Log" onAction="#onMenuShowLog" />
+            <SeparatorMenuItem />
+            <MenuItem text="Exit" onAction="#onMenuExit" />
+        </Menu>
+        <Menu text="Help">
+            <MenuItem text="About" onAction="#onMenuAbout" />
+            <MenuItem text="Instructions" onAction="#onMenuInstructions" />
+        </Menu>
     </MenuBar>
     <Label fx:id="label_info_1" />
     <Label fx:id="label_info_2" />
     <VBox alignment="CENTER" spacing="25">
-        <HBox spacing="10" alignment="CENTER"></HBox>
+        <HBox spacing="10" alignment="CENTER" />
         <Label fx:id="label_info_result_count"
             style="-fx-font-size: 16px; -fx-font-family: monospace;" />
-        <GridPane fx:id="grid_actions_higher" alignment="CENTER"></GridPane>
+        <GridPane fx:id="grid_actions_higher" alignment="CENTER" />
 
         <Pane prefWidth="Infinity" minHeight="5" style="-fx-background-color: lightblue;" />
-        <GridPane fx:id="grid_actions_lower" alignment="CENTER" gridLinesVisible="false" hgap="20"
-            vgap="20">
+        <GridPane fx:id="grid_actions_lower" alignment="CENTER" hgap="20" vgap="20">
             <!--row 0-->
             <JFXButton fx:id="btn_register" onAction="#onBtnRegister" text="REGISTER"
                 GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <!--row 1-->
-            <JFXTextField fx:id="tf_lamp" labelFloat="true" promptText="Lamp"
-                GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <JFXComboBox fx:id="cb_lamp_selection" onAction="#onCbLampSelection"
+                GridPane.rowIndex="1" GridPane.columnIndex="0" />
             <JFXToggleButton fx:id="tgl_btn_on_off" onAction="#onTglBtnOnOff" text="ON/OFF"
                 GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <!--row 2-->
             <Label text="Saturation" GridPane.rowIndex="2" GridPane.columnIndex="1" />
             <JFXSlider fx:id="slider_saturation" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+            <JFXColorPicker fx:id="color_picker" onAction="#onColorSelected"
+                GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <!--row 3-->
             <Label text="Brightness" GridPane.rowIndex="3" GridPane.columnIndex="1" />
             <JFXSlider fx:id="slider_brightness" GridPane.rowIndex="3" GridPane.columnIndex="2" />
-            <JFXButton fx:id="btn_put_color" onAction="#onBtnPutColor" text="SEND COLOR"
-                GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <JFXColorPicker fx:id="color_picker" onAction="#onColorSelected"
-                GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <JFXButton fx:id="btn_put_color2" onAction="#onBtnPutColor2" text="SEND COLOR"
-                GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <JFXButton onAction="#onBtnPutColor" text="SEND COLOR" GridPane.columnIndex="3"
+                GridPane.rowIndex="3" />
+            <JFXButton onAction="#onBtnPutColor2" text="SEND COLOR" GridPane.columnIndex="3"
+                GridPane.rowIndex="3" />
             <!--row 5-->
-            <JFXButton fx:id="btn_info" onAction="#onBtnInfo" text="INFO" GridPane.columnIndex="0"
+            <JFXButton onAction="#onBtnInfo" text="INFO" GridPane.columnIndex="0"
                 GridPane.rowIndex="5" />
-            <JFXButton fx:id="btn_reset" onAction="#onBtnReset" text="RESET"
-                GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <JFXButton onAction="#onBtnReset" text="RESET" GridPane.columnIndex="1"
+                GridPane.rowIndex="5" />
         </GridPane>
     </VBox>
 </VBox>
