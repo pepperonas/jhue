@@ -70,7 +70,7 @@ public class Main extends Application {
     }
 
     private void initScene(Stage primaryStage, Parent root) {
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
