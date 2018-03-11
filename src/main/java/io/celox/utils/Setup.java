@@ -52,4 +52,12 @@ public class Setup {
     public static boolean hasValidUsername() {
         return !Preferences.userNodeForPackage(Setup.class).get("username", "").isEmpty();
     }
+
+    public static void setLastSelectedLamp(String key) {
+        Preferences.userNodeForPackage(Setup.class).put("last_selected_lamp", key);
+    }
+
+    public static String getLastSelectedLamp() {
+        return Preferences.userNodeForPackage(Setup.class).get("last_selected_lamp", "");
+    }
 }

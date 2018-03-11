@@ -53,6 +53,8 @@ public class Main extends Application {
 
         initScene(primaryStage, root);
 
+        primaryStage.setOnCloseRequest(event -> controller.onClose());
+
         //noinspection Duplicates
         root.getScene().addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             final KeyCombination kbSwitchConnection = new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN);

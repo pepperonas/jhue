@@ -83,6 +83,7 @@ public class MainController {
     private Color mColor = Color.WHITESMOKE;
 
     private HashMap<String, HueLamp> mHueLampMap = new HashMap<>();
+    private boolean mReadOnly = false;
 
     @FXML
     public void initialize() {
@@ -97,6 +98,16 @@ public class MainController {
     }
 
     private void initGui() {
+
+        slider_saturation.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Log.i(TAG, "changed: sat=" + newValue);
+            applyColor();
+        });
+
+        slider_brightness.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Log.i(TAG, "changed: bri=" + newValue);
+            applyColor();
+        });
 
         cb_lamp_selection.setConverter(new StringConverter<HueLamp>() {
             @Override
@@ -116,12 +127,14 @@ public class MainController {
             btn_register.setDisable(true);
 
             loadLampMap();
-
-            for (Map.Entry<String, HueLamp> entry : mHueLampMap.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                System.out.println("key=" + key + " -> " + value.toString());
-            }
+            //            for (Map.Entry<String, HueLamp> entry : mHueLampMap.entrySet()) {
+            //                String key = entry.getKey();
+            //                Object value = entry.getValue();
+            //                System.out.println("key=" + key + " -> " + value.toString());
+            //            }
+            String lastSelected = Setup.getLastSelectedLamp();
+            HueLamp lastSelectedLamp = mHueLampMap.get(lastSelected);
+            cb_lamp_selection.getSelectionModel().select(lastSelectedLamp);
         }
     }
 
@@ -192,12 +205,12 @@ public class MainController {
 
     public void onBtnPutColor(@SuppressWarnings("unused") ActionEvent actionEvent) {
         Log.i(TAG, "onBtnPut: ");
-        String lamp = String.valueOf(cb_lamp_selection.getSelectionModel().getSelectedIndex() + 1);
+        HueLamp lamp = cb_lamp_selection.getSelectionModel().getSelectedItem();
 
         String saturation = String.valueOf((int) (slider_saturation.getValue() * 2.54f));
         String brightness = String.valueOf((int) (slider_brightness.getValue() * 2.54f));
 
-        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp + "/state",
+        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp.getKey() + "/state",
                 "{\"on\":true, " +
                         "\"sat\":" + saturation + ", " +
                         "\"bri\":" + brightness + ", " +
@@ -211,9 +224,11 @@ public class MainController {
     }
 
     private void applyColor() {
-        // TODO: 11.03.18 17:24 get lamp and access it via id over api
-        String lamp = String.valueOf(cb_lamp_selection.getSelectionModel().getSelectedIndex() + 1);
+        HueLamp lamp = cb_lamp_selection.getSelectionModel().getSelectedItem();
 
+        if (mReadOnly) {
+            return;
+        }
         String saturation = String.valueOf((int) (slider_saturation.getValue() * 2.54f));
         String brightness = String.valueOf((int) (slider_brightness.getValue() * 2.54f));
         Log.v(TAG, "applyColor: sat=" + saturation);
@@ -223,7 +238,7 @@ public class MainController {
         String xyColor = HueUtils.formatXyToString(colorMap);
 
         String result = HttpUtils.executePut(
-                "http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp + "/state",
+                "http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp.getKey() + "/state",
                 "{\"on\":true," +
                         "\"sat\":" + saturation + "," +
                         "\"bri\":" + brightness + "," +
@@ -290,9 +305,9 @@ public class MainController {
 
     public void onTglBtnOnOff(@SuppressWarnings("unused") ActionEvent actionEvent) {
         String state = tgl_btn_on_off.isSelected() ? "true" : "false";
-        String lamp = String.valueOf(cb_lamp_selection.getSelectionModel().getSelectedIndex() + 1);
+        HueLamp lamp = cb_lamp_selection.getSelectionModel().getSelectedItem();
         Log.i(TAG, "onBtnPut: " + state);
-        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp + "/state",
+        String result = HttpUtils.executePut("http://192.168.178.134/api/" + Setup.getUsername() + "/lights/" + lamp.getKey() + "/state",
                 "{\"on\":" + state + "}");
 
         Log.i(TAG, "onBtnPut: " + result);
@@ -306,9 +321,25 @@ public class MainController {
     }
 
     public void onCbLampSelection(@SuppressWarnings("unused") ActionEvent actionEvent) {
+        mReadOnly = true;
         HueLamp selectedLamp = cb_lamp_selection.getSelectionModel().getSelectedItem();
 
+        Setup.setLastSelectedLamp(selectedLamp.getKey());
+
         HueLamp hueLamp = getInfoLamp(selectedLamp.getKey());
-        Log.i(TAG, "onCbLampSelection: " + hueLamp.toString());
+        if (hueLamp != null) {
+            Log.i(TAG, "onCbLampSelection: " + hueLamp.toString());
+            slider_brightness.setValue(hueLamp.getHueLampState().getBrightness() / 2.54f);
+            slider_saturation.setValue(hueLamp.getHueLampState().getSaturation() / 2.54f);
+            Log.w(TAG, "onCbLampSelection: on=" + hueLamp.getHueLampState().isOn());
+            tgl_btn_on_off.setSelected(hueLamp.getHueLampState().isOn());
+        } else {
+            Log.w(TAG, "onCbLampSelection: lamp not found.");
+        }
+        mReadOnly = false;
+    }
+
+    public void onClose() {
+        Log.i(TAG, "onClose: ");
     }
 }

@@ -51,12 +51,14 @@
                 GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <!--row 2-->
             <Label text="Saturation" GridPane.rowIndex="2" GridPane.columnIndex="1" />
-            <JFXSlider fx:id="slider_saturation" GridPane.rowIndex="2" GridPane.columnIndex="2" />
+            <JFXSlider fx:id="slider_saturation" GridPane.rowIndex="2" GridPane.columnIndex="2"
+                min="1" />
             <JFXColorPicker fx:id="color_picker" onAction="#onColorSelected"
                 GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <!--row 3-->
             <Label text="Brightness" GridPane.rowIndex="3" GridPane.columnIndex="1" />
-            <JFXSlider fx:id="slider_brightness" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+            <JFXSlider fx:id="slider_brightness" GridPane.rowIndex="3" GridPane.columnIndex="2"
+                min="1" />
             <JFXButton onAction="#onBtnPutColor" text="SEND COLOR" GridPane.columnIndex="3"
                 GridPane.rowIndex="3" />
             <JFXButton onAction="#onBtnPutColor2" text="SEND COLOR" GridPane.columnIndex="3"
