@@ -83,7 +83,6 @@ public class MainController {
     private Color mColor = Color.WHITESMOKE;
 
     private HashMap<String, HueLamp> mHueLampMap = new HashMap<>();
-    private boolean mReadOnly = false;
 
     @FXML
     public void initialize() {
@@ -102,11 +101,13 @@ public class MainController {
         slider_saturation.valueProperty().addListener((observable, oldValue, newValue) -> {
             Log.i(TAG, "changed: sat=" + newValue);
             applyColor();
+            tgl_btn_on_off.setSelected(true);
         });
 
         slider_brightness.valueProperty().addListener((observable, oldValue, newValue) -> {
             Log.i(TAG, "changed: bri=" + newValue);
             applyColor();
+            tgl_btn_on_off.setSelected(true);
         });
 
         cb_lamp_selection.setConverter(new StringConverter<HueLamp>() {
@@ -226,9 +227,6 @@ public class MainController {
     private void applyColor() {
         HueLamp lamp = cb_lamp_selection.getSelectionModel().getSelectedItem();
 
-        if (mReadOnly) {
-            return;
-        }
         String saturation = String.valueOf((int) (slider_saturation.getValue() * 2.54f));
         String brightness = String.valueOf((int) (slider_brightness.getValue() * 2.54f));
         Log.v(TAG, "applyColor: sat=" + saturation);
@@ -321,7 +319,6 @@ public class MainController {
     }
 
     public void onCbLampSelection(@SuppressWarnings("unused") ActionEvent actionEvent) {
-        mReadOnly = true;
         HueLamp selectedLamp = cb_lamp_selection.getSelectionModel().getSelectedItem();
 
         Setup.setLastSelectedLamp(selectedLamp.getKey());
@@ -336,7 +333,6 @@ public class MainController {
         } else {
             Log.w(TAG, "onCbLampSelection: lamp not found.");
         }
-        mReadOnly = false;
     }
 
     public void onClose() {
